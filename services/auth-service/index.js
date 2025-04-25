@@ -8,7 +8,7 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:5173', // Adjust this to your frontend URL
+  origin: 'http://localhost:5173',
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -40,7 +40,7 @@ app.post('/signup', async (req, res) => {
 // login
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  console.log('Login attempt:', { email, password }); // Added log statement
+  console.log('Login attempt:', { email, password });
   try {
     const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     console.log('Database query result:', result.rows.length ? 'User found' : 'User not found');
@@ -59,33 +59,14 @@ app.post('/login', async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    console.log('User logged in:', user.email); // Changed from crossOriginIsolated.log
-    return res.json({ token }); // Added return statement
+    console.log('User logged in:', user.email);
+    return res.json({ token });
 
   } catch (err) {
     console.error('Login error:', err);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-// protected route example
-app.get('/profile', authenticateToken, async (req, res) => {
-  res.json({ message: `Hello, ${req.user.username}!` });
-});
-
-// middleware to verify JWT
-function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader?.split(' ')[1];
-
-  if (!token) return res.sendStatus(401);
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
-}
 
 app.listen(PORT, () => {
   console.log(`Auth service running on http://localhost:${PORT}`);

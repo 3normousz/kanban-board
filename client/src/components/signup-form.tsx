@@ -12,21 +12,28 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-export function LoginForm({
+export function SignUpForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const navigate = useNavigate()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     
+    if (password !== confirmPassword) {
+      alert("Passwords do not match")
+      setIsLoading(false)
+      return
+    }
+
     try {
-      const data = await authApi.login({
+      const data = await authApi.signup({
         email: email,
         password: password,
       });
@@ -46,7 +53,7 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Login</CardTitle>
+          <CardTitle className="text-xl">Create a new account</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
@@ -67,12 +74,6 @@ export function LoginForm({
                 <div className="grid gap-3">
                   <div className="flex items-center">
                     <Label htmlFor="password">Password</Label>
-                    <a
-                      href="#"
-                      className="ml-auto text-sm underline-offset-4 hover:underline"
-                    >
-                      Forgot your password?
-                    </a>
                   </div>
                   <Input 
                     id="password" 
@@ -82,15 +83,23 @@ export function LoginForm({
                     required
                     disabled={isLoading}
                   />
+                  <Input 
+                    id="confirm-password" 
+                    type="password" 
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    disabled={isLoading}
+                  />
                 </div>
                 <Button type="submit" className="w-full">
-                  Login
+                  Sign Up
                 </Button>
               </div>
               <div className="text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <Link to="/signup" className="underline underline-offset-4">
-                  Sign up
+                Already have an account?{" "}
+                <Link to="/" className="underline underline-offset-4">
+                  Login
                 </Link>
               </div>
             </div>
