@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const pool = require('./db');
-require('dotenv').config();
+require('dotenv').config({ path : '../../.env' });
 
 const app = express();
 const PORT = process.env.PORT || 3001;

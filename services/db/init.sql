@@ -1,6 +1,13 @@
 BEGIN;
 
+DROP TABLE IF EXISTS notifications CASCADE;
+DROP TABLE IF EXISTS cards CASCADE;
+DROP TABLE IF EXISTS columns CASCADE;
+DROP TABLE IF EXISTS board_members CASCADE;
+DROP TABLE IF EXISTS boards CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 
+\echo 'Creating users table...'
 CREATE TABLE IF NOT EXISTS public.users
 (
     id serial NOT NULL,
@@ -10,6 +17,7 @@ CREATE TABLE IF NOT EXISTS public.users
     CONSTRAINT users_email_key UNIQUE (email)
 );
 
+\echo 'Creating boards table...'
 CREATE TABLE IF NOT EXISTS public.boards
 (
     id serial NOT NULL,
@@ -21,6 +29,7 @@ CREATE TABLE IF NOT EXISTS public.boards
     CONSTRAINT boards_pkey PRIMARY KEY (id)
 );
 
+\echo 'Creating board_members table...'
 CREATE TABLE IF NOT EXISTS public.board_members
 (
     board_id integer NOT NULL,
@@ -29,6 +38,7 @@ CREATE TABLE IF NOT EXISTS public.board_members
     CONSTRAINT board_members_pkey PRIMARY KEY (board_id, user_id)
 );
 
+\echo 'Creating columns table...'
 CREATE TABLE IF NOT EXISTS public.columns
 (
     id serial NOT NULL,
@@ -39,6 +49,7 @@ CREATE TABLE IF NOT EXISTS public.columns
     CONSTRAINT columns_pkey PRIMARY KEY (id)
 );
 
+\echo 'Creating cards table...'
 CREATE TABLE IF NOT EXISTS public.cards
 (
     id serial NOT NULL,
@@ -51,6 +62,7 @@ CREATE TABLE IF NOT EXISTS public.cards
     CONSTRAINT cards_pkey PRIMARY KEY (id)
 );
 
+\echo 'Creating notifications table...'
 CREATE TABLE IF NOT EXISTS public.notifications
 (
     id serial NOT NULL,
@@ -62,52 +74,6 @@ CREATE TABLE IF NOT EXISTS public.notifications
     CONSTRAINT notifications_pkey PRIMARY KEY (id)
 );
 
-ALTER TABLE IF EXISTS public.boards
-    ADD CONSTRAINT boards_owner_id_fkey FOREIGN KEY (owner_id)
-    REFERENCES public.users (id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION;
-
-
-ALTER TABLE IF EXISTS public.board_members
-    ADD CONSTRAINT board_members_board_id_fkey FOREIGN KEY (board_id)
-    REFERENCES public.boards (id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE CASCADE;
-
-
-ALTER TABLE IF EXISTS public.board_members
-    ADD CONSTRAINT board_members_user_id_fkey FOREIGN KEY (user_id)
-    REFERENCES public.users (id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE CASCADE;
-
-
-ALTER TABLE IF EXISTS public.columns
-    ADD CONSTRAINT columns_board_id_fkey FOREIGN KEY (board_id)
-    REFERENCES public.boards (id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE CASCADE;
-
-
-ALTER TABLE IF EXISTS public.cards
-    ADD CONSTRAINT cards_board_id_fkey FOREIGN KEY (board_id)
-    REFERENCES public.boards (id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE CASCADE;
-
-
-ALTER TABLE IF EXISTS public.cards
-    ADD CONSTRAINT cards_column_id_fkey FOREIGN KEY (column_id)
-    REFERENCES public.columns (id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE CASCADE;
-
-
-ALTER TABLE IF EXISTS public.notifications
-    ADD CONSTRAINT notifications_user_id_fkey FOREIGN KEY (user_id)
-    REFERENCES public.users (id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE CASCADE;
+\echo 'DONE...'
 
 END;
