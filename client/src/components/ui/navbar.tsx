@@ -30,7 +30,7 @@ export default function Navbar() {
             <Link to="/home" className={mobileLinkStyles}>
               Home
             </Link>
-            <Link to="/about" className={mobileLinkStyles}>
+            <Link to="/notification" className={mobileLinkStyles}>
               Notification
             </Link>
             <button onClick={handleLogout} className={`${mobileLinkStyles} text-red-600`}>
@@ -43,7 +43,7 @@ export default function Navbar() {
         <Link to="/home" className={linkStyles}>
           Home
         </Link>
-        <Link to="/about" className={linkStyles}>
+        <Link to="/notification" className={linkStyles}>
           Notification
         </Link>
         <button onClick={handleLogout} className={logoutStyles}>

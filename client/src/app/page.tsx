@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { DataTable } from '@/components/data-table';
-import Navbar from '@/components/navbar';
-import { boardsApi, Board } from '@/api/boards/boards';
-import { AddBoardDialog } from '@/components/add-board';
+import { useState, useEffect } from "react";
+import { DataTable } from "@/components/data-table";
+import Navbar from "@/components/ui/navbar";
+import { boardsApi, Board } from "@/api/boards/boards";
+import { AddBoardDialog } from "@/components/add-board";
 
 export function Home() {
   const [boards, setBoards] = useState<Board[]>([]);
@@ -13,7 +13,7 @@ export function Home() {
       const data = await boardsApi.getBoards();
       setBoards(data);
     } catch (error) {
-      console.error('Failed to fetch boards:', error);
+      console.error("Failed to fetch boards:", error);
     } finally {
       setIsLoading(false);
     }
@@ -34,7 +34,11 @@ export function Home() {
           {isLoading ? (
             <p>Loading...</p>
           ) : boards.length > 0 ? (
-            <DataTable data={boards} isLoading={isLoading} onBoardUpdated={fetchBoards} />
+            <DataTable
+              data={boards}
+              isLoading={isLoading}
+              onBoardUpdated={fetchBoards}
+            />
           ) : (
             <p>No boards available.</p>
           )}
